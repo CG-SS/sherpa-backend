@@ -1,5 +1,7 @@
-const main = async () => {
+import { app } from "./app";
 
-}
+const port = process.env.PORT ?? 8080;
 
-main();
+app.listen(port, () => {
+  console.log(`Listening to port '${port}'.`);
+});
