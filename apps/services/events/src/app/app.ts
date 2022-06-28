@@ -1,5 +1,5 @@
 import { V1GetRoutes } from './routes';
-import { defaultApp } from "@sherpa-backend/services/rest";
+import { defaultApp } from '@sherpa-backend/services/rest';
 
 export const app = defaultApp;
 

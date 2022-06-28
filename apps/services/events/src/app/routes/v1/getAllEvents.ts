@@ -1,9 +1,12 @@
 import { Request, Response } from 'express';
-import { RouteResolver } from "../types";
+import { RouteResolver } from '../types';
 
 // GET /events
-export const getAllEvents: RouteResolver = ['/events', async (req: Request, res: Response) => {
-  console.log('GetAllEvent')
+export const getAllEvents: RouteResolver = [
+  '/events',
+  async (req: Request, res: Response) => {
+    console.log('GetAllEvent');
 
-  res.status(200).send();
-}];
+    res.status(200).send();
+  },
+];

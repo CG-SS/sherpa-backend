@@ -1,5 +1,5 @@
-import * as express from "express";
-import { DefaultGetRoutes } from "./routes";
+import * as express from 'express';
+import { DefaultGetRoutes } from './routes';
 
 export const defaultApp = express();
 

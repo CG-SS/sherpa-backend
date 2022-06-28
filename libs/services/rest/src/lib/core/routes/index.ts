@@ -1,5 +1,3 @@
-import { health } from "./health";
+import { health } from './health';
 
-export const DefaultGetRoutes = [
-  health,
-];
+export const DefaultGetRoutes = [health];

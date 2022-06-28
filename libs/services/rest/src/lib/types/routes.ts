@@ -1,3 +1,6 @@
-import { Request, Response } from "express";
+import { Request, Response } from 'express';
 
-export type RouteResolver = readonly [string, (req: Request, res: Response) => Promise<void>];
+export type RouteResolver = readonly [
+  string,
+  (req: Request, res: Response) => Promise<void>
+];
