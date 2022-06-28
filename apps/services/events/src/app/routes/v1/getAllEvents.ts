@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { RouteResolver } from '../types';
+import { RouteResolver } from '@sherpa-backend/services/rest';
 import { prisma } from '@sherpa-backend/prisma';
 
 // GET /events
