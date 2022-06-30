@@ -68,7 +68,7 @@ model Weather {
 
   id String @id @default(uuid()) @db.Uuid
 
-  temperatureInDegreesCelcius Int @map("temperature_in_degrees_celcius")
+  temperatureInDegreesCelsius Int @map("temperature_in_degrees_celcius")
   chanceOfRain                Int @map("chance_of_rain")
 
   // A weather is predicted under an event.
