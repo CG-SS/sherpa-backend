@@ -14,7 +14,7 @@ export const getEvent: RouteResolver = [
       return;
     }
 
-    const event = prisma.event.findUnique({
+    const event = await prisma.event.findUnique({
       where: {
         id: eventId as string,
       },
