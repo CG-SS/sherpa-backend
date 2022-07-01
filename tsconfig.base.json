@@ -1,6 +1,8 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
     "rootDir": ".",
     "sourceMap": true,
     "declaration": false,
@@ -15,7 +17,11 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@sherpa-backend/logger": ["libs/logger/src/index.ts"],
       "@sherpa-backend/prisma": ["libs/prisma/src/index.ts"],
+      "@sherpa-backend/services/file-uploader-shared": [
+        "libs/services/file-uploader-shared/src/index.ts"
+      ],
       "@sherpa-backend/services/rest": ["libs/services/rest/src/index.ts"]
     }
   },
