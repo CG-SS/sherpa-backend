@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: weather-service-depl-dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: weather-service
+  template:
+    metadata:
+      labels:
+        app: weather-service
+    spec:
+      containers:
+        - name: weather-service
+          image: sherpa/weather-service:0.0.1
+          env:
+            - name: DATABASE_URL
+              value: 'postgresql://postgres:admin@weather-service-clusterip-postgres-srv:5432/postgres'
+            - name: NODE_ENV
+              value: 'development'
+            - name: PORT
+              value: '9000'
+            - name: KAFKA_GROUP_ID
+              value: 'weather-service-group'
+            - name: KAFKA_TOPIC
+              value: 'events'
+            - name: KAFKA_CLIENT_ID
+              value: 'weather-service-client'
+            - name: KAFKA_BROKERS
+              value: 'kafka-clusterip-srv:9092'
+            - name: WEATHER_API_KEY
+              value: '2016c7b2fdfa4d5ab91181915220407'
+            - name: WEATHER_API_BASE
+              value: 'https://api.weatherapi.com/v1/forecast.json'
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: weather-service-nodeport-srv-dev
+spec:
+  type: NodePort
+  selector:
+    app: weather-service
+  ports:
+    - name: weather-service
+      port: 9000
+      targetPort: 9000

@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: file-uploader-service-postgres-depl-integration-test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: file-uploader-service-postgres-integration-test
+  template:
+    metadata:
+      labels:
+        app: file-uploader-service-postgres-integration-test
+    spec:
+      containers:
+        - name: file-uploader-service-postgres-integration-test
+          image: postgres
+          env:
+            - name: POSTGRES_PASSWORD
+              value: 'admin'
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: file-uploader-service-clusterip-postgres-srv-integration-test
+spec:
+  selector:
+    app: file-uploader-service-postgres-integration-test
+  ports:
+    - name: postgres
+      protocol: TCP
+      port: 5432
+      targetPort: 5432

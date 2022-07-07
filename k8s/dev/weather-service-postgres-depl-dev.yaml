@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: weather-service-postgres-depl-dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: weather-service-postgres
+  template:
+    metadata:
+      labels:
+        app: weather-service-postgres
+    spec:
+      containers:
+        - name: weather-service-postgres
+          image: postgres
+          env:
+            - name: POSTGRES_PASSWORD
+              value: 'admin'
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: weather-service-clusterip-postgres-srv
+spec:
+  selector:
+    app: weather-service-postgres
+  ports:
+    - name: postgres
+      protocol: TCP
+      port: 5432
+      targetPort: 5432

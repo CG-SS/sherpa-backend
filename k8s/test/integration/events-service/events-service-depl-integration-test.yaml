@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: events-service-depl-integration-test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: events-service-integration-test
+  template:
+    metadata:
+      labels:
+        app: events-service-integration-test
+    spec:
+      containers:
+        - name: events-service
+          image: sherpa/events-service-integration-test:0.0.1
+          env:
+            - name: DATABASE_URL
+              value: 'postgresql://postgres:admin@events-service-clusterip-postgres-srv-integration-test:5432/postgres'
+            - name: NODE_ENV
+              value: 'test'
+            - name: PORT
+              value: '9000'
+            - name: KAFKA_GROUP_ID
+              value: 'events-service-group'
+            - name: KAFKA_TOPIC
+              value: 'events'
+            - name: KAFKA_CLIENT_ID
+              value: 'events-service-client'
+            - name: KAFKA_BROKERS
+              value: 'kafka-clusterip-srv:9092'
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: events-service-nodeport-srv-integration-test
+spec:
+  type: NodePort
+  selector:
+    app: events-service-integration-test
+  ports:
+    - name: events-service-integration-test
+      port: 9000
+      targetPort: 9000

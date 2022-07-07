@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: events-service-postgres-depl-dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: events-service-postgres
+  template:
+    metadata:
+      labels:
+        app: events-service-postgres
+    spec:
+      containers:
+        - name: events-service-postgres
+          image: postgres
+          env:
+            - name: POSTGRES_PASSWORD
+              value: 'admin'
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: events-service-clusterip-postgres-srv
+spec:
+  selector:
+    app: events-service-postgres
+  ports:
+    - name: postgres
+      protocol: TCP
+      port: 5432
+      targetPort: 5432
