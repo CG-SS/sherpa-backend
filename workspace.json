@@ -2,11 +2,14 @@
   "$schema": "./node_modules/nx/schemas/workspace-schema.json",
   "version": 2,
   "projects": {
+    "domain-events": "libs/domain/events",
+    "kafka": "libs/kafka",
     "logger": "libs/logger",
     "prisma": "libs/prisma",
     "services-events": "apps/services/events",
     "services-file-uploader": "apps/services/file-uploader",
     "services-file-uploader-shared": "libs/services/file-uploader-shared",
-    "services-rest": "libs/services/rest"
+    "services-rest": "libs/services/rest",
+    "services-weather": "apps/services/weather"
   }
 }
