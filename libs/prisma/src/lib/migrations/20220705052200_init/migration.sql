@@ -12,14 +12,14 @@ CREATE TABLE "events" (
 );
 
 -- CreateTable
-CREATE TABLE "attendees" (
+CREATE TABLE "name" (
     "id" UUID NOT NULL,
     "name" TEXT NOT NULL,
     "age" INTEGER NOT NULL,
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMPTZ NOT NULL,
 
-    CONSTRAINT "attendees_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "name_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -50,6 +50,12 @@ CREATE TABLE "_AttendeeToEvent" (
 );
 
 -- CreateIndex
+CREATE UNIQUE INDEX "events_name_key" ON "events"("name");
+
+-- CreateIndex
+CREATE INDEX "events_name_idx" ON "events"("name");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "events_organizer_id_key" ON "events"("organizer_id");
 
 -- CreateIndex
@@ -68,7 +74,7 @@ ALTER TABLE "events" ADD CONSTRAINT "events_organizer_id_fkey" FOREIGN KEY ("org
 ALTER TABLE "weathers" ADD CONSTRAINT "weathers_event_id_fkey" FOREIGN KEY ("event_id") REFERENCES "events"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_AttendeeToEvent" ADD CONSTRAINT "_AttendeeToEvent_A_fkey" FOREIGN KEY ("A") REFERENCES "attendees"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_AttendeeToEvent" ADD CONSTRAINT "_AttendeeToEvent_A_fkey" FOREIGN KEY ("A") REFERENCES "name"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_AttendeeToEvent" ADD CONSTRAINT "_AttendeeToEvent_B_fkey" FOREIGN KEY ("B") REFERENCES "events"("id") ON DELETE CASCADE ON UPDATE CASCADE;
