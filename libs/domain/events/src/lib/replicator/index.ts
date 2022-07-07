@@ -1,0 +1,1 @@
+export { startKafkaReplicator } from './replicator';
