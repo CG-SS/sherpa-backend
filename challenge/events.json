@@ -1,0 +1,34 @@
+[
+  {
+    "name": "Outside party 8",
+    "date": "2022-07-07T15:46:43+00:00",
+    "isOutside": true,
+    "organizer": {
+      "name": "John Smith"
+    },
+    "attendees": [
+      {
+        "name": "Rebecca Johnson",
+        "age": 18
+      },
+      {
+        "name": "Kevin Kepler",
+        "age": 18
+      }
+    ]
+  },
+  {
+    "name": "External Techno Rave 8",
+    "date": "2022-07-10T15:46:43+00:00",
+    "isOutside": true,
+    "organizer": {
+      "name": "DJ Party"
+    },
+    "attendees": [
+      {
+        "name": "Kepler Abismal",
+        "age": 22
+      }
+    ]
+  }
+]
