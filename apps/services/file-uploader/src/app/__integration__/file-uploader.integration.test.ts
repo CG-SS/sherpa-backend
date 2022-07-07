@@ -1,23 +1,11 @@
 import request from 'supertest';
-import { app } from "./app";
-import { prisma } from "@sherpa-backend/prisma";
+import { app } from '../app';
+import { prisma } from '@sherpa-backend/prisma';
 
 describe('File Uploader Service App', () => {
-
-  process.env.DATABASE_URL = 'postgresql://postgres:admin@localhost:12999/postgres';
-
-  const OLD_ENV = process.env;
-
-  beforeEach(() => {
-    // Clears the cache
-    jest.resetModules();
-    // Make a copy of the env
-    process.env = { ...OLD_ENV };
-  });
-
-  afterAll(() => {
-    // Restore old environment
-    process.env = OLD_ENV;
+  beforeAll(() => {
+    // We make sure the database is clean before testing.
+    return prisma.weather.deleteMany().then(() => prisma.event.deleteMany());
   });
 
   it('Returns health status', async () => {
@@ -27,20 +15,20 @@ describe('File Uploader Service App', () => {
 
   it('Creates a new event', async () => {
     const jsonBody = {
-      name: "Party at the lake",
-      date: "2022-06-28T15:46:43+00:00",
+      name: 'Party at the lake',
+      date: '2022-06-28T15:46:43+00:00',
       isOutside: true,
       organizer: {
-        name: "John Smith"
+        name: 'John Smith',
       },
       attendees: [
         {
-          name: "Rebecca Johnson",
-          age: 18
+          name: 'Rebecca Johnson',
+          age: 18,
         },
         {
-          name: "Kevin Kepler",
-          age: 18
+          name: 'Kevin Kepler',
+          age: 18,
         },
       ],
     };
@@ -51,6 +39,9 @@ describe('File Uploader Service App', () => {
       .set('Content-Type', 'application/json');
 
     const { status, body } = res;
+
+    console.log(body);
+
     const { id } = body;
 
     // We check if the event has the same fields.
@@ -60,7 +51,7 @@ describe('File Uploader Service App', () => {
       },
       include: {
         organizer: true,
-      }
+      },
     });
 
     expect(status).toEqual(200);
@@ -72,24 +63,26 @@ describe('File Uploader Service App', () => {
   });
 
   it('Uploads JSON file', async () => {
-    const jsonFile = JSON.stringify([{
-      name: "Party at the lake",
-      date: "2022-06-28T15:46:43+00:00",
-      isOutside: true,
-      organizer: {
-        name: "John Smith"
+    const jsonFile = JSON.stringify([
+      {
+        name: 'Party at the lake',
+        date: '2022-06-28T15:46:43+00:00',
+        isOutside: true,
+        organizer: {
+          name: 'John Smith',
+        },
+        attendees: [
+          {
+            name: 'Rebecca Johnson',
+            age: 18,
+          },
+          {
+            name: 'Kevin Kepler',
+            age: 18,
+          },
+        ],
       },
-      attendees: [
-        {
-          name: "Rebecca Johnson",
-          age: 18
-        },
-        {
-          name: "Kevin Kepler",
-          age: 18
-        },
-      ],
-    }]);
+    ]);
 
     const res = await request(app)
       .post('/v1/upload/events/json')

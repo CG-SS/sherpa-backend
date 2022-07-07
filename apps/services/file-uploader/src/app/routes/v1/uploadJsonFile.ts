@@ -1,10 +1,10 @@
-import { RouteResolver } from "@sherpa-backend/services/rest";
-import { Request, Response } from "express";
-import { logger } from "@sherpa-backend/logger";
-import { UploadedFile } from "express-fileupload";
-import { environment } from "../../environment";
-import path from "path";
-import { getUnixTime } from "date-fns";
+import { RouteResolver } from '@sherpa-backend/services/rest';
+import { Request, Response } from 'express';
+import { logger } from '@sherpa-backend/logger';
+import { UploadedFile } from 'express-fileupload';
+import { environment } from '../../environment';
+import path from 'path';
+import { getUnixTime } from 'date-fns';
 
 const { unparsedFilesDir } = environment;
 
@@ -14,7 +14,7 @@ export const uploadJsonFile: RouteResolver = [
   async (req: Request, res: Response) => {
     const { files } = req;
 
-    if(!files || !Object.keys(files).length){
+    if (!files || !Object.keys(files).length) {
       res.status(422).send();
       return;
     }
@@ -24,7 +24,7 @@ export const uploadJsonFile: RouteResolver = [
     const jsonFile = files[keys[0]] as UploadedFile;
 
     // If the file is truncated, it's over the size limit.
-    if(jsonFile.truncated){
+    if (jsonFile.truncated) {
       res.status(422).send();
       return;
     }
@@ -34,7 +34,7 @@ export const uploadJsonFile: RouteResolver = [
     // We only accept JSONs, so we check for the file extension.
     // Of course, that doesn't mean that it is actually a JSON, but it's all
     // we can do for now.
-    if(!name.endsWith('.json')){
+    if (!name.endsWith('.json')) {
       res.status(422).send();
       return;
     }
@@ -44,7 +44,9 @@ export const uploadJsonFile: RouteResolver = [
 
     try {
       // We timestamp the name so there are fewer chances of collision.
-      await jsonFile.mv(path.join(unparsedFilesDir, `${getUnixTime(new Date())}-${name}`));
+      await jsonFile.mv(
+        path.join(unparsedFilesDir, `${getUnixTime(new Date())}-${name}`)
+      );
     } catch (e) {
       logger.error(e);
 

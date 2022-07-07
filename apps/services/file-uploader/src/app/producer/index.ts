@@ -1,0 +1,1 @@
+export { getKafkaProducer } from './producer';
