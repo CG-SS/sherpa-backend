@@ -13,7 +13,7 @@ model Event {
 
   id String @id @default(uuid()) @db.Uuid
 
-  name      String
+  name      String    @unique
   date      DateTime  @db.Timestamptz
   isOutside Boolean   @map("is_outside")
 
@@ -30,10 +30,12 @@ model Event {
   // Logging.
   createdAt DateTime @default(now())  @map("created_at") @db.Timestamptz
   updatedAt DateTime @updatedAt       @map("updated_at") @db.Timestamptz
+
+  @@index([name])
 }
 
 model Attendee {
-  @@map("attendees")
+  @@map("name")
 
   id String @id @default(uuid()) @db.Uuid
 
