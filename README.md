@@ -94,6 +94,8 @@ In order to run the integration test, after building the images and loading them
 
 ## Final considerations
 
-There are some rough edges, because of time constraints. Because of that, some places you will notice that there were some decisions made 'for the sake of simplicity' or 'due to time constraints'.
+There are some rough edges, due to time constraints. Because of that, some places you will notice that there were some decisions made 'for the sake of simplicity' or 'due to time constraints' (e.x hardcoded DB password, API keys, etc).
+
+Another thing is that the Git history is not that pretty.
 
 
