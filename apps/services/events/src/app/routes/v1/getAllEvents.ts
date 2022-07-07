@@ -29,6 +29,11 @@ export const getAllEvents: RouteResolver = [
       skip: cursorStrId ? 1 : 0,
       take: MAX_RETURN_ALL_EVENTS,
       cursor: cursorStrId ? { id: cursorStrId } : undefined,
+      include: {
+        weather: true,
+        organizer: true,
+        attendees: true,
+      },
     });
 
     res.status(200).json(allEvents);

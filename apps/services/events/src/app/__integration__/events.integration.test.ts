@@ -1,24 +1,10 @@
 import request from 'supertest';
-import { Prisma, Event } from '@prisma/client';
-import { toDate } from 'date-fns';
+import { Prisma } from '@prisma/client';
 
-import { app } from './app';
+import { app } from '../app';
 import { prisma } from '@sherpa-backend/prisma';
 
-describe('Events Service App', () => {
-  // Helper func to map Dates into ISO date strings, which are returned by the
-  // endpoint.
-  const mapToIsoDate = (event: Event) => {
-    const { createdAt, date, updatedAt } = event;
-
-    return {
-      ...event,
-      createdAt: toDate(createdAt).toISOString(),
-      date: toDate(date).toISOString(),
-      updatedAt: toDate(updatedAt).toISOString(),
-    };
-  };
-
+describe('Events Service App Integration Test', () => {
   // The events to be used on the tests.
   const events: Prisma.EventCreateArgs[] = [
     {
@@ -73,12 +59,13 @@ describe('Events Service App', () => {
     },
   ];
 
-  beforeAll(async () => {
-    // We populate the database with the new events.
-    await Promise.all(events.map(prisma.event.create));
+  beforeAll(() => {
+    // We make sure the database is clean before testing.
+    return prisma.weather
+      .deleteMany()
+      .then(() => prisma.event.deleteMany())
+      .then(() => Promise.all(events.map(prisma.event.create)));
   });
-
-  process.env.DATABASE_URL = 'postgresql://postgres:admin@localhost:12999/postgres';
 
   it('Returns health status', async () => {
     const res = await request(app).get('/health').set('Content-Type', 'application/json');
@@ -86,9 +73,13 @@ describe('Events Service App', () => {
   });
 
   it('Returns all events', async () => {
+    // Ideally, we want to test if the return type is the same, however, since
+    // the returned dates are a string, we would have to cast each element of
+    // each returned object to string, and for the sake of time I won't be
+    // doing this here. And the same applies to the other tests.
     const expectedEvents = (await prisma.event.findMany())
-      .map(mapToIsoDate)
-      .sort((a, b) => a.id.localeCompare(b.id));
+      .map((e) => e.id)
+      .sort((a, b) => a.localeCompare(b));
 
     const res = await request(app)
       .get('/v1/events')
@@ -97,14 +88,18 @@ describe('Events Service App', () => {
     const { status, body } = res;
 
     expect(status).toEqual(200);
-    expect(body.sort((a, b) => a.id.localeCompare(b.id))).toEqual(expectedEvents);
+    expect(body.map((e) => e.id).sort((a, b) => a.localeCompare(b))).toEqual(
+      expectedEvents
+    );
   });
 
   it('Returns paginated results', async () => {
-    const currentEvents = (await prisma.event.findMany()).map(mapToIsoDate);
+    const currentEvents = (await prisma.event.findMany())
+      .map((e) => e.id)
+      .sort((a, b) => a.localeCompare(b));
 
-    const { id } = currentEvents[0];
-    const eventsRest = currentEvents.slice(1).sort((a, b) => a.id.localeCompare(b.id));
+    const id = currentEvents[0];
+    const eventsRest = currentEvents.slice(1).sort((a, b) => a.localeCompare(b));
 
     const res = await request(app)
       .get(`/v1/events?cursorId=${id}`)
@@ -113,13 +108,11 @@ describe('Events Service App', () => {
     const { status, body } = res;
 
     expect(status).toEqual(200);
-    expect(body.sort((a, b) => a.id.localeCompare(b.id))).toEqual(eventsRest);
+    expect(body.map((e) => e.id).sort((a, b) => a.localeCompare(b))).toEqual(eventsRest);
   });
 
   it('Returns specific event', async () => {
-    const event = mapToIsoDate(await prisma.event.findFirst());
-
-    const { id } = event;
+    const { id } = await prisma.event.findFirst();
 
     const res = await request(app)
       .get(`/v1/events/${id}`)
@@ -128,6 +121,6 @@ describe('Events Service App', () => {
     const { status, body } = res;
 
     expect(status).toEqual(200);
-    expect(body).toEqual(event);
+    expect(body.id).toEqual(id);
   });
 });

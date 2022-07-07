@@ -18,6 +18,11 @@ export const getEvent: RouteResolver = [
       where: {
         id: eventId as string,
       },
+      include: {
+        weather: true,
+        organizer: true,
+        attendees: true,
+      },
     });
 
     res.status(200).json(event);
