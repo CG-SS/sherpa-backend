@@ -4,7 +4,6 @@
   "license": "MIT",
   "scripts": {
     "prisma:generate": "yarn prisma generate --schema libs/prisma/src/lib/schema.prisma",
-    "prisma:reset": "yarn prisma migrate reset --schema libs/prisma/src/lib/schema.prisma",
     "prisma:migrate:dev": "yarn prisma migrate dev --schema libs/prisma/src/lib/schema.prisma",
     "prisma:migrate:deploy": "yarn prisma migrate deploy --schema libs/prisma/src/lib/schema.prisma",
     "prisma:resetdb": "yarn prisma migrate reset --schema libs/prisma/src/lib/schema.prisma",
@@ -19,6 +18,8 @@
     "minikube:images:rm": "minikube image rm sherpa/file-uploader-service:0.0.1 && minikube image rm sherpa/events-service:0.0.1 && minikube image rm sherpa/weather-service:0.0.1 && minikube image rm sherpa/events-service-integration-test:0.0.1 && minikube image rm sherpa/file-uploader-service-integration-test:0.0.1",
     "minikube:images:load": "minikube image load sherpa/file-uploader-service:0.0.1 && minikube image load sherpa/events-service:0.0.1 && minikube image load sherpa/weather-service:0.0.1 && minikube image load sherpa/events-service-integration-test:0.0.1 && minikube image load sherpa/file-uploader-service-integration-test:0.0.1",
     "k8s:start:dev": "kubectl apply -f ./k8s/dev",
+    "k8s:start:integration:events": "kubectl apply -f ./k8s/test/integration/events-service",
+    "k8s:start:integration:file-uploader": "kubectl apply -f ./k8s/test/integration/file-uploader",
     "lint": "nx run-many --all --target=lint --fix",
     "start": "nx run-many --parallel --target=serve --projects=services-events,services-file-uploader,services-weather",
     "build": "nx run-many --parallel --target=build --no-dev --projects=services-events,services-file-uploader,services-weather",
