@@ -24,6 +24,8 @@ Each of the services have their own repository, and specific information about t
 
 We utilize Kubernetes and Docker to deploy our app. Follow [this tutorial](https://docs.docker.com/compose/gettingstarted/) in order to set up Docker. If running locally, we need to set up Minikube. For that, follow the tutorial on [this page](https://minikube.sigs.k8s.io/docs/start/).
 
+Also, you will need an `API_KEY` for the weather service. 
+
 After setting up Minikube, we need to build all the Docker images for each service. For that, use the following command:
 
 > yarn docker:build
